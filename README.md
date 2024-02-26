@@ -334,5 +334,6 @@ FROM CTE1  INNER JOIN CTE2
  Handling, Cleanliness, Check-in-Service, Online Boarding will contribute to an increase in passengers overall satisfaction.
 
 
-
+[Dano Airline Dashboard.pdf](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/files/14406713/Dano.Airline.Dashboard.pdf)
+line dashboard.pdf)
   
