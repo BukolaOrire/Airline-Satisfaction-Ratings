@@ -7,7 +7,7 @@
 - [Data Cleaning](#data-cleaning)
 - [Exploratory Data Analysis](#exploratory-data-analysis)
 - [Data Analysis](#data-analysis)
-- [Findings/Recommendations](#findings-recommendations)
+- [Findings/Recommendation](#findings-recommendation)
 
 ## Overview
 The Purpose of this data Analysis Project is to provide insights into the airline passengers satisfaction ratings. Conducting analysisto determine there is a correlation between two or more service ratings and the overall satisfaction level of passengers, finding patterns and trends, visualising the results and making recommendations on areas that require improvement in order to boost customer satisfaction.
@@ -258,7 +258,6 @@ FROM CTE1  INNER JOIN CTE2
  ON  Food_and_Drink = In_flight_Entertainment
  ORDER BY 1 ASC
 
-
  ---inflight service and inflight wifi service 
  SELECT In_flight_service
         ,COUNT(In_flight_Service) AS Passenger_count
@@ -274,7 +273,6 @@ FROM CTE1  INNER JOIN CTE2
  FROM Dano_Airline
  GROUP BY In_flight_Wifi_Service
  ORDER BY 2 DESC
-
 
  -- IS there a relationship betweeen seat comfort and leg room service by rating?
  --seat comfort
@@ -322,7 +320,7 @@ FROM CTE1  INNER JOIN CTE2
  FROM Dano_Airline
 ```
 
-## Findings/Recomendations
+## Findings/Recomendation
 - Passengers travelling short distances (distance less than 800 miles) prefer to travel via Economy Class whereas passengers travelling Long distance (distance more than or equal to 800 
   miles ) prefer to travel via Business Class due to its convenience. Very Few People fly in Economy Class. At least 70% of passengers flying Economy Class are Neutral or dissatisfied.
 - There is a similarity between Arrival delay and Departure delay Satisfaction rate . In conclusion passengers are more dissatisfied with the Departure delay and Arrival delay which is 
