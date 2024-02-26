@@ -35,7 +35,7 @@ EDA involved exploring the data to answer key questions;
 - Whats the overall experience of Passengers?
 - Satisfaction rate by type of travel
 
-  ![Dashboard](dashboard.PNG)
+  ![Dashboard](Dashboard.png)
   
   ![Dashboard](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/d838e59a-41ca-42d1-b975-6309b33acb12)
 
