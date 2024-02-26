@@ -6,7 +6,7 @@
 - [Tools used for Analysis](#tools-used-for-analysis)
 - [Data Cleaning](#data-cleaning)
 - [Exploratory Data Analysis](#exploratory-data-analysis)
-- [Data Modelling](#data-modelling)
+- [Data Analysis](#data-analysis)
 - [Findings/Recommendations](#findings-recommendations)
 
 ## Overview
@@ -17,7 +17,7 @@ This is the primary dataset used for this analysis "Airline_data_airline_passeng
 
 ## Tools Used for Analysis
 -  Power Query for Data Cleaning
--  SQL Server for Exploratory Data Analysis and Data Modelling
+-  SQL Server for Exploratory Data Analysis
 -  Power BI for Data Visualization and Reports
 
  ## Data Cleaning
@@ -35,7 +35,12 @@ EDA involved exploring the data to answer key questions;
 - Whats the overall experience of Passengers?
 - Satisfaction rate by type of travel
 
-## Data Modelling
+  ![Dashboard](dashboard.PNG)
+  
+  ![Dashboard](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/d838e59a-41ca-42d1-b975-6309b33acb12)
+
+
+## Data Analysis
 ```sql
 SELECT * FROM Dano_Airline
 
