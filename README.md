@@ -10,7 +10,8 @@
 - [Findings/Recommendation](#findings-recommendation)
 
 ## Overview
-The Purpose of this data Analysis Project is to provide insights into the airline passengers satisfaction ratings. Conducting analysisto determine there is a correlation between two or more service ratings and the overall satisfaction level of passengers, finding patterns and trends, visualising the results and making recommendations on areas that require improvement in order to boost customer satisfaction.
+The Purpose of this data Analysis Project is to provide insights into the airline passengers satisfaction ratings.Conducting analysisto determine there is a correlation between two or more service ratings and the overall satisfaction level of passengers, finding patterns and trends, visualising the results and making recommendations on areas that require improvement in order to boost customer satisfaction.
+**_Disclaimer_**: _All datasets and reportd do not represent any company, institution or country, but just a dummy dataset to demonstrate capabilities of Sql._**
  
 ## Data Source
 This is the primary dataset used for this analysis "Airline_data_airline_passenger rating.csv" file [download here](https://docs.google.com/spreadsheets/d/15Kp-2yfQFNRGJPNOkpMwG-OMX8xVZOJ5VL7f35v7sRQ/edit#gid=1647986900)
@@ -21,8 +22,9 @@ This is the primary dataset used for this analysis "Airline_data_airline_passeng
 -  Power BI for Data Visualization and Reports
 
  ## Data Cleaning
- -  Data Loading and inspecting for missing values and errors
+ - Data Loading and inspecting for missing values and errors
     Arrival delay column has about 393 Null. Median was used to correct this errors
+-  Data Formatting and conversion of appropraite data type
   
 ## Exploratory Data Analysis
 EDA involved exploring the data to answer key questions;
