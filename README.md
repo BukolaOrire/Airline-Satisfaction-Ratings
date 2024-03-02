@@ -37,9 +37,8 @@ EDA involved exploring the data to answer key questions;
 - Whats the overall experience of Passengers?
 - Satisfaction rate by type of travel
 
-  ![Dashboard](Dashboard.png)
-  
-  ![Dashboard](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/d838e59a-41ca-42d1-b975-6309b33acb12)
+
+![dano airline dashboard](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/7912a00c-a3fa-4181-8220-21c7e4919265)
 
 
 ## Data Analysis
@@ -49,7 +48,7 @@ SELECT * FROM Dano_Airline
 ---Passenger overall experience by satisfaction
 SELECT Satisfaction,COUNT(Satisfaction) AS Total_satisfaction
                    ,COUNT(Satisfaction )*100.0
-				   /(SELECT COUNT(Satisfaction)FROM Dano_Airline) 
+                 /(SELECT COUNT(Satisfaction)FROM Dano_Airline) 
 				   AS Percentage 
 FROM Dano_Airline
 GROUP BY Satisfaction
@@ -66,8 +65,8 @@ GROUP BY Satisfaction
  ---Total Count of Satisfied /Dissatisfied Passengers by TypeofTravel 
  SELECT Satisfaction
        ,Type_of_Travel,COUNT(Type_of_travel) AS Typecount
-                      ,COUNT(Type_of_travel)*100
-					  /(SELECT COUNT(Type_of_travel)FROM Dano_Airline) AS Percentage
+        ,COUNT(Type_of_travel)*100
+           /(SELECT COUNT(Type_of_travel)FROM Dano_Airline) AS Percentage
  FROM Dano_Airline
  GROUP BY Satisfaction,Type_of_Travel
  
@@ -95,7 +94,6 @@ FROM
 Dano_Airline
 GROUP BY  Age_category,Satisfaction
 ORDER BY  1,2 DESC
-
 
  --count of depature delay and arrival delay by satisfaction,and having  <=60 minutes and >60 minutes 
  --Depature_delay less than/equal to 60 minutes 
@@ -302,24 +300,6 @@ FROM CTE1  INNER JOIN CTE2
  FROM Dano_Airline
  GROUP BY  Gate_Location
  ORDER BY 2 DESC
-
----Whats the average rating of each service?
- SELECT AVG(CAST(In_flight_Entertainment AS DECIMAL))
-       ,AVG(CAST(In_flight_Wifi_Service AS DECIMAL))
-	   ,AVG(CAST(In_flight_Service AS DECIMAL))
-	   ,AVG(CAST(On_board_Service AS DECIMAL))
-	   ,AVG(CAST(Online_Boarding AS DECIMAL))
-       ,AVG(CAST(Ease_of_Online_Booking AS DECIMAL))
-	   ,AVG(CAST(Leg_Room_Service AS DECIMAL))
-	   ,AVG(CAST(Seat_Comfort AS DECIMAL))
-	   ,AVG(CAST(Baggage_Handling AS DECIMAL))
-       ,AVG(CAST(Departure_and_Arrival_Time_Convenience AS DECIMAL))
-	   ,AVG(CAST(Food_and_Drink AS DECIMAL))
-	   ,AVG(CAST(In_flight_Entertainment AS DECIMAL))
-	   ,AVG(CAST(Gate_Location AS DECIMAL))
-	   ,AVG(CAST(Cleanliness AS DECIMAL))
-	   ,AVG(CAST(Check_in_Service AS DECIMAL))
- FROM Dano_Airline
 ```
 
 ## Findings/Recomendation
