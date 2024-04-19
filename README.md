@@ -10,7 +10,7 @@
 - [Findings/Recommendation](#findings-recommendation)
 
 ## Overview
-The Purpose of this data Analysis Project is to provide insights into the airline passengers satisfaction ratings.Conducting analysisto determine there is a correlation between two or more service ratings and the overall satisfaction level of passengers, finding patterns and trends, visualising the results and making recommendations on areas that require improvement in order to boost customer satisfaction.
+The Purpose of this data Analysis Project is to provide insights on the airline passengers satisfaction ratings.Conducting analysis to determine there is a correlation between two or more service ratings and the overall satisfaction level of passengers, finding patterns and trends, visualising the results and making recommendations on areas that require improvement in order to boost customer satisfaction.
 **_Disclaimer_**: _All datasets and reportd do not represent any company, institution or country, but just a dummy dataset to demonstrate capabilities of Sql._**
  
 ## Data Source
