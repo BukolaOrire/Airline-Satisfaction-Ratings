@@ -1,4 +1,4 @@
-# Dano Airline Passengers Satisfaction Report
+# Dano Airline Passengers Satisfaction Rating Analysis
 
 ### Table of Contents
 - [Project Overview](#project-overview)
@@ -7,6 +7,7 @@
 - [Data Cleaning](#data-cleaning)
 - [Problem Statement](#problem-statement)
 - [Exploratory Data Analysis](#exploratory-data-analysis)
+- [Findings](#findings)
 - [Recommendation](#recommendation)
 
 ## Project Overview
@@ -25,80 +26,25 @@ This is the primary dataset used for this analysis "Airline_data_airline_passeng
 -  Data Validation.
   
 ## Problem Statement
-- How many passengers are satisfied/dissatisfied when depature delay and arrival delay is less than or equal to 60 minutes and more than 60 minutes?
+- How many passengers are satisfied and dissatisfied when depature delay and arrival delay is less than or equal to 60 minutes and more than 60 minutes?
 - Is there a correlation between any of the services rendered by the airline?
 - flight distance by satisfaction less than 800 miles and more than or equal to 800 miles
-- How many passengers are Satisfied/dissatisfied with depature and arrival time convenience?
+- How many passengers are satisfied and dissatisfied with depature and arrival time convenience?
 - What is the passengers count by age group?
 - Whats the average rating of each service?
 
 
 ## Exploratory Data Analysis
+#### passesngers satisfaction rate 
 ```sql
-SELECT * FROM Dano_airline
-
---- Creating a new column Age_range to input Age into segments
-ALTER TABLE Dano_airline
-ADD Age_range NVARCHAR (50)
-
-UPDATE Dano_airline
-SET Age_range = CASE
-    WHEN Age BETWEEN 7 AND 12 THEN '7-12'
-    WHEN Age BETWEEN 13 AND 19 THEN '13-19'
-    WHEN Age BETWEEN 20 AND 35 THEN '20-35'
-    WHEN Age BETWEEN 36 AND 55 THEN '36-55'
-	WHEN Age BETWEEN 56 AND 85 THEN '56-85'
-    END
-
----Creating a new column Age_group to input Age Range into category
-ALTER TABLE Dano_airline
-ADD Age_group VARCHAR (50)
-
-UPDATE Dano_airline
-SET Age_group = CASE
-      WHEN Age BETWEEN 7 AND 12 THEN 'Adolescent'
-      WHEN Age BETWEEN 13 AND 19 THEN 'Teen'
-      WHEN Age BETWEEN 20 AND 35 THEN 'Young Adult'
-      WHEN Age BETWEEN 36 AND 55 THEN 'Adult'
-      ELSE 'Old Adult' END  
-
----How many Passengers are satisfied/neutral by Age Category.
-SELECT Age_range,Age_group,Satisfaction
-       ,ROUND(COUNT(Satisfaction)*100.0/
-	   (SELECT COUNT(Satisfaction) FROM Dano_airline),2) AS Percentage_Count
+SELECT Satisfaction,COUNT(Satisfaction)*100.0/(SELECT COUNT(Satisafaction) FROM Dano_airline)
 FROM Dano_airline
-GROUP BY Age_range,Age_group,Satisfaction
-ORDER BY 4 DESC
+GROUP BY Satisfaction
+```
+![satisfaction_rate](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/12e20c94-4fc6-425a-ae50-848459db7e7c)
 
----Creating New Column to categorise flight distance into distinct groups
-ALTER TABLE Dano_Airline
-ADD Distance_category NVARCHAR (50)
-
-UPDATE Dano_Airline
-SET Distance_category = 'Short flight'
-WHERE Flight_Distance < 800
-
-UPDATE Dano_Airline
-SET Distance_category = 'Long flight'
-WHERE Flight_Distance >= 800
-
----How many passengers trvel short distance by class?
- SELECT Class,COUNT(Flight_Distance) AS Short_flight_passengers
-            ,ROUND(COUNT(Flight_Distance)*100.0/(SELECT COUNT(Flight_Distance) 
-			FROM Dano_airline),2) AS Percentage
- FROM Dano_airline 
- WHERE Distance_category ='short flight'
- GROUP BY Class 
-
----How many passengers travel long distance by class?
-SELECT Class,COUNT(Flight_Distance) AS Long_flight_passengers
-            ,ROUND(COUNT(Flight_Distance)*100.0/(SELECT COUNT(Flight_Distance) 
-			FROM Dano_airline),2) AS Percentage 
- FROM Dano_airline 
- WHERE Distance_category ='long flight'
- GROUP BY Class
-
---- Count of passengers by Depature delay less than/equal to 60 minutes and greater than 60 minutes
+#### Count of passengers by Depature delay less than/equal to 60 minutes and greater than 60 minutes
+```sql
  WITH CTE1 AS
      (SELECT COUNT(Departure_Delay) AS Min_depaturedelay
  FROM Dano_airline
@@ -109,10 +55,11 @@ CTE2 AS
  WHERE Departure_Delay >'60')
 SELECT Min_depaturedelay,Max_depaturedelay
 FROM CTE1 INNER JOIN CTE2 
-ON 1=1 
-
---- Count of passengers by Arrival delay less than/equal to 60 minutes and greater than 60 minutes
- WITH CTE1 AS 
+ON 1=1
+```
+#### Count of passengers by Arrival delay less than/equal to 60 minutes and greater than 60 minutes
+```sql
+WITH CTE1 AS 
      (SELECT COUNT(Arrival_Delay) AS Min_arrivaldelay
 FROM Dano_airline
  WHERE Arrival_Delay <='60'),
@@ -123,47 +70,28 @@ WHERE Arrival_Delay >'60')
 SELECT Min_arrivaldelay,Max_arrivaldelay
 FROM CTE1 INNER JOIN CTE2 
 ON 1=1 
-
- --Count of departure and arrival time convience by satisfaction
- CREATE VIEW Satisfied AS 
- SELECT TOP 6 Departure_and_Arrival_Time_Convenience
-        ,COUNT(Satisfaction) AS Satisfied_customers
- FROM Dano_airline
- WHERE Satisfaction LIKE 'Sat%'
- GROUP BY Departure_and_Arrival_Time_Convenience
- ORDER BY 2 DESC
-
- CREATE VIEW Nuetral AS 
- SELECT TOP 6 Departure_and_Arrival_Time_Convenience
-        ,COUNT(Satisfaction) AS Dissatisfied_customers
- FROM Dano_airline
- WHERE Satisfaction LIKE 'Neutral%'
- GROUP BY Departure_and_Arrival_Time_Convenience
- ORDER BY 2 DESC
-
- SELECT a.Departure_and_Arrival_Time_Convenience,
-        a.Satisfied_customers,b.Dissatisfied_customers
- FROM Satisfied a
- INNER JOIN
- Nuetral b
- ON a.Departure_and_Arrival_Time_Convenience 
-    = b.Departure_and_Arrival_Time_Convenience
 ```
+![delay_count](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/00d20ec5-064e-4031-8c0f-389c23fd4d0c)
+
+
+![dano_airline](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/3515c8d2-f7dc-4df4-9ed2-b770a26b46fb)
+
+
+## Findings
+- More passengers travel for business compared to personal, and more than 80% of passengers in business type of travel are satisfied with the overall experience while only 7% personal are satisfied.
+- Most passengers are returning customers and only few are first-time passengers.
+- 60% of Passengers travelling short distances (distance less than 800 miles) travel for personal reasons whereas 77% of passengers travelling Long distance (distance greater than or equal to 800 miles ) travel for Business, this may be due to its convenience.
+- Business class has more customer patronage compared to other class of travel. Very Few People travel via economy class and 65% of passengers traveling via economy class are the most Neutral or dissatisfied.
+- There are similarities between Arrival delay and Departure delay satisfaction count. High number of passengers are satisfied with the Departure delay and Arrival delay less than or equal to 60 minutes compared to delay more than 60 minutes which is expected.
+- High number of passengers rated departure and arrival time convenience between 4 and 5, suggesting that most passengers may have been satisfied with this service.
+- There is a positive correlation between Food and Drink Service and In-flight entertainment service. food and drink and inflight entertainment are related. Hence, there is a match between the ratings of both services. No passenger rated both services with 0, indicating that the overall experience is satisfactory.
+- The average rating for Ease of Online Booking is 2.76, indicating that most passengers rated from 2 to 3. Most passengers rated Online Boarding from 3 to 4, as seen by the 
+ average rating  of 3.25.
+- There is no service the airline offers that received an overall negative response with majority of the ratings falling between 3 and 5, and the most reoccurring average for the services is 3. However, there is still need for improvement.
 
 ## Recommendation
-- Passengers travelling short distances (distance less than 800 miles) prefer to travel via Economy Class whereas passengers travelling Long distance (distance more than or equal to 800 
-  miles ) prefer to travel via Business Class due to its convenience. Very Few People fly in Economy Class. At least 70% of passengers flying Economy Class are Neutral or dissatisfied.
-- There is a similarity between Arrival delay and Departure delay Satisfaction rate . In conclusion passengers are more dissatisfied with the Departure delay and Arrival delay which is 
- expected.
-- Passengers are generally more dissatisfied with the Departure and Arrival Time than satisfied. The average rating is 3.06 within the rating range of 0 to 5. This points out the 
- necessary need for improvement.
-- There is a positive correlation between Food and Drink Service and In-Flight Entertainment Service. Food and Drink and Inflight Entertainment are related. Hence,  there is a match 
- between the ratings of both services by passengers. No passenger rated both services with 0, indicating that the overall experience is satisfactory. Improvements in Food and Drink 
- Service will also influence Inflight Entertainment and vice versa.
-- The average rating for Ease of Online Booking is 2.76, indicating that most passengers rated it between 2 and 4. Most passengers rated Online Boarding  from 3 to 4, as seen by the 
- average rating  of 3.25.
-- There is no service the airline offers that received an overall negative response with majority of the ratings falling between 3  and  5 , and the most reoccurring average for the 
- services is 3. However, there is still need  for improvement. By enhancing services that affects  the general experience of passengers , eg. Seat Comfort, Leg Room Service, Baggage 
- Handling, Cleanliness, Check-in-Service, Online Boarding will contribute to an increase in passengers overall satisfaction.
-
-
+- By enhancing services that influence the general experience of passengers eg. seat comfort, leg room service, Baggage handling, Cleaniness, Check-in-service, Online boarding etc will contribute to improving customers overall satisfaction and also attract more customers.
+- Improvement in one of two serivices that are positively correlated such as food and drink  & inflight entertainment, seat comfort & leg room service, ease of online booking & online boarding may influence the other.
+- There is a specific need for improvement in the overal services offered for passengers in economy class as they are the most dissatisfied class.
+- Introducing FAQS and updating its user experience will help provide relavant insights on frequent customers concern and assit management to understand their customers better which may help improve success rate of the buisness. 
+  
