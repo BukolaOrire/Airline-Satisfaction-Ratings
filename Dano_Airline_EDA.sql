@@ -1,11 +1,11 @@
 ```sql
 SELECT * FROM Dano_airline
-
-  --Passengers count by Type of travel 
- SELECT Type_of_Travel,COUNT(Type_of_travel) AS Typecount
+```
+---Passengers count by Type of travel
+SELECT Type_of_Travel,COUNT(Type_of_travel) AS Typecount
  FROM Dano_airline
  GROUP BY Satisfaction,Type_of_Travel
- 
+
 -- Passenger count of class 
  SELECT class,COUNT(class) AS classcount
  FROM Dano_airline
