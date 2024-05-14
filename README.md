@@ -35,7 +35,7 @@ This is the primary dataset used for this analysis "Airline_data_airline_passeng
 
 
 ## Exploratory Data Analysis
-#### passesngers satisfaction rate 
+#### passengers satisfaction rate 
 ```sql
 SELECT Satisfaction,COUNT(Satisfaction)*100.0/(SELECT COUNT(Satisafaction) FROM Dano_airline)
 FROM Dano_airline
@@ -90,8 +90,8 @@ ON 1=1
 - There is no service the airline offers that received an overall negative response with majority of the ratings falling between 3 and 5, and the most reoccurring average for the services is 3. However, there is still need for improvement.
 
 ## Recommendation
-- By enhancing services that influence the general experience of passengers eg. seat comfort, leg room service, Baggage handling, Cleaniness, Check-in-service, Online boarding etc will contribute to improving customers overall satisfaction and also attract more customers.
-- Improvement in one of two serivices that are positively correlated such as food and drink  & inflight entertainment, seat comfort & leg room service, ease of online booking & online boarding may influence the other.
+- By enhancing services that influence the general experience of passengers eg. seat comfort, leg room service, Baggage handling, Cleaniness, Check-in-service, Online boarding etc will contribute to improving customers overall satisfaction and also attract new customers.
+- Improvement in one of two services that are positively correlated such as food and drink & inflight entertainment, seat comfort & leg room service, ease of online booking & online boarding may influence the other.
 - There is a specific need for improvement in the overal services offered for passengers in economy class as they are the most dissatisfied class.
-- Introducing FAQS and updating its user experience will help provide relavant insights on frequent customers concern and assit management to understand their customers better which may help improve success rate of the buisness. 
+- Introducing FAQS and updating its user experience will help provide relevant insights on frequent customers questions and concern, and assit management to understand their customers better which may help improve success rate of the buisness. 
   
