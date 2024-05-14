@@ -1,308 +1,156 @@
-# Dano Airline Performance Evaluation Analysis
+# Dano Airline Passengers Satisfaction Report
 
 ### Table of Contents
-- [Overview](#overview)
+- [Project Overview](#project-overview)
 - [Data Source](#data-source)
 - [Tools used for Analysis](#tools-used-for-analysis)
 - [Data Cleaning](#data-cleaning)
+- [Problem Statement](#problem-statement)
 - [Exploratory Data Analysis](#exploratory-data-analysis)
-- [Data Analysis](#data-analysis)
-- [Findings/Recommendation](#findings-recommendation)
+- [Recommendation](#recommendation)
 
-## Overview
-The Purpose of this data Analysis Project is to provide insights on the airline passengers satisfaction ratings.Conducting analysis to determine there is a correlation between two or more service ratings and the overall satisfaction level of passengers, finding patterns and trends, visualising the results and making recommendations on areas that require improvement in order to boost customer satisfaction.
-**_Disclaimer_**: _All datasets and reportd do not represent any company, institution or country, but just a dummy dataset to demonstrate capabilities of Sql._**
+## Project Overview
+Dano Airline is a UK-based airline. The latest customer survey results revealed a decline in satisfaction rate falling below 50% for the first time ever. The objective of this analysis is to find patterns and trends to help improve the various services rendered by the airline and boost passengers satisfaction.
+**_Disclaimer_**: _All datasets and report do not represent any company, institution or country, but just a dummy dataset to demonstrate capabilities of Sql._**
  
 ## Data Source
 This is the primary dataset used for this analysis "Airline_data_airline_passenger rating.csv" file [download here](https://docs.google.com/spreadsheets/d/15Kp-2yfQFNRGJPNOkpMwG-OMX8xVZOJ5VL7f35v7sRQ/edit#gid=1647986900)
 
 ## Tools Used for Analysis
--  Power Query for Data Cleaning
--  SQL Server for Exploratory Data Analysis
--  Power BI for Data Visualization and Reports
+-  SQL Server for Exploratory Data Analysis.
+-  Power BI for Data Visualization and Reports.
 
  ## Data Cleaning
- - Data Loading and inspecting for missing values and errors
-    Arrival delay column has about 393 Null. Median was used to correct this errors
--  Data Formatting and conversion of appropraite data type
+ - Data Loading and Transformation; Arrival delay had 393 Nulls, and Median was used to correct this errors
+-  Data Validation.
   
-## Exploratory Data Analysis
-EDA involved exploring the data to answer key questions;
+## Problem Statement
 - How many passengers are satisfied/dissatisfied when depature delay and arrival delay is less than or equal to 60 minutes and more than 60 minutes?
-- Is there a correlation between two or more services?
+- Is there a correlation between any of the services rendered by the airline?
 - flight distance by satisfaction less than 800 miles and more than or equal to 800 miles
 - How many passengers are Satisfied/dissatisfied with depature and arrival time convenience?
-- Whats the satisfaction rate by age category?
+- What is the passengers count by age group?
 - Whats the average rating of each service?
-- Whats the overall experience of Passengers?
-- Satisfaction rate by type of travel
 
 
-![dano airline dashboard](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/7912a00c-a3fa-4181-8220-21c7e4919265)
-
-
-## Data Analysis
+## Exploratory Data Analysis
 ```sql
-SELECT * FROM Dano_Airline
+SELECT * FROM Dano_airline
 
----Passenger overall experience by satisfaction
-SELECT Satisfaction,COUNT(Satisfaction) AS Total_satisfaction
-                   ,COUNT(Satisfaction )*100.0
-                 /(SELECT COUNT(Satisfaction)FROM Dano_Airline) 
-				   AS Percentage 
-FROM Dano_Airline
-GROUP BY Satisfaction
+--- Creating a new column Age_range to input Age into segments
+ALTER TABLE Dano_airline
+ADD Age_range NVARCHAR (50)
 
----Total Count of Satisfied /Dissatisfied Passengers by Gender 
- SELECT Gender,Satisfaction
-             ,COUNT(Gender) AS Gender_count
-              ,ROUND(COUNT(Gender)*100.0
-			  /(SELECT COUNT(Gender) FROM Dano_Airline),2) AS Percentage 
- FROM Dano_Airline
- GROUP BY Gender,Satisfaction
- ORDER BY 3 DESC
+UPDATE Dano_airline
+SET Age_range = CASE
+    WHEN Age BETWEEN 7 AND 12 THEN '7-12'
+    WHEN Age BETWEEN 13 AND 19 THEN '13-19'
+    WHEN Age BETWEEN 20 AND 35 THEN '20-35'
+    WHEN Age BETWEEN 36 AND 55 THEN '36-55'
+	WHEN Age BETWEEN 56 AND 85 THEN '56-85'
+    END
 
- ---Total Count of Satisfied /Dissatisfied Passengers by TypeofTravel 
- SELECT Satisfaction
-       ,Type_of_Travel,COUNT(Type_of_travel) AS Typecount
-        ,COUNT(Type_of_travel)*100
-           /(SELECT COUNT(Type_of_travel)FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY Satisfaction,Type_of_Travel
- 
- ---How many Passenger are in Business Class? 
- SELECT class,COUNT(class) AS classcount
-             ,COUNT(Class)*100/(SELECT COUNT(Class)
-	         FROM Dano_Airline) AS Percentage 
- FROM Dano_Airline
- GROUP BY class
- ORDER BY 2 DESC
+---Creating a new column Age_group to input Age Range into category
+ALTER TABLE Dano_airline
+ADD Age_group VARCHAR (50)
 
---- How many Passengers  are satisfied/neutral in each Age Category 
-SELECT Age_category,Satisfaction
-      ,COUNT(Satisfaction) AS Satisfaction_Count
-      ,ROUND(COUNT(Satisfaction)*100.0/
-	  (SELECT COUNT(Satisfaction) FROM Dano_Airline),2) AS Percentage 
-FROM 
-  (SELECT Age,Satisfaction,
-       CASE WHEN Age BETWEEN 7 AND 12 THEN 'Adolescent'
-       WHEN Age BETWEEN 13 AND 19 THEN 'Teen'
-       WHEN Age BETWEEN 20 AND 35 THEN 'Young Adult'
-       WHEN Age BETWEEN 36 AND 55 THEN 'Adult'
-       ELSE 'Old Adult' END  AS Age_Category 
-       FROM Dano_Airline)
-Dano_Airline
-GROUP BY  Age_category,Satisfaction
-ORDER BY  1,2 DESC
+UPDATE Dano_airline
+SET Age_group = CASE
+      WHEN Age BETWEEN 7 AND 12 THEN 'Adolescent'
+      WHEN Age BETWEEN 13 AND 19 THEN 'Teen'
+      WHEN Age BETWEEN 20 AND 35 THEN 'Young Adult'
+      WHEN Age BETWEEN 36 AND 55 THEN 'Adult'
+      ELSE 'Old Adult' END  
 
- --count of depature delay and arrival delay by satisfaction,and having  <=60 minutes and >60 minutes 
- --Depature_delay less than/equal to 60 minutes 
- SELECT Satisfaction
-       ,COUNT(Satisfaction) AS Mindepaturedelay_count
- FROM Dano_Airline
- WHERE Departure_Delay <= '60' AND Satisfaction ='satisfied'
- GROUP BY Satisfaction
-  UNION 
- SELECT Satisfaction
-       ,COUNT(Satisfaction) AS Mindepaturedelay_count
- FROM Dano_Airline
- WHERE Departure_Delay <='60' AND Satisfaction LIKE 'neutral%'
- GROUP BY Satisfaction
+---How many Passengers are satisfied/neutral by Age Category.
+SELECT Age_range,Age_group,Satisfaction
+       ,ROUND(COUNT(Satisfaction)*100.0/
+	   (SELECT COUNT(Satisfaction) FROM Dano_airline),2) AS Percentage_Count
+FROM Dano_airline
+GROUP BY Age_range,Age_group,Satisfaction
+ORDER BY 4 DESC
 
- ---Depature delay more than to 60 minutes 
-SELECT Satisfaction
-       ,COUNT(Satisfaction) AS MaxDepaturdelay_count
-FROM Dano_Airline
-WHERE Departure_Delay >'60' AND Satisfaction ='satisfied'
-GROUP BY Satisfaction
-   UNION 
-SELECT Satisfaction
-       ,COUNT(Satisfaction) AS MaxDepaturdelay_count
-FROM Dano_Airline
-WHERE Departure_Delay >'60' AND Satisfaction LIKE 'neutral%'
-GROUP BY Satisfaction
+---Creating New Column to categorise flight distance into distinct groups
+ALTER TABLE Dano_Airline
+ADD Distance_category NVARCHAR (50)
 
-----Arrival delay less than/equal 60 minutes 
-SELECT Satisfaction
-       ,COUNT(Satisfaction) AS minarrivaldelay_count
-FROM Dano_Airline
-WHERE Arrival_Delay <='60' AND Satisfaction ='satisfied'
-GROUP BY Satisfaction
-  UNION 
-SELECT Satisfaction
-       ,COUNT(Satisfaction) AS minarrivaldelay_count
-FROM Dano_Airline
-WHERE Arrival_Delay <='60' AND Satisfaction LIKE 'Neutral%'
-GROUP BY Satisfaction
+UPDATE Dano_Airline
+SET Distance_category = 'Short flight'
+WHERE Flight_Distance < 800
 
------Arrival delay more than 60 minutes 
-SELECT Satisfaction
-       ,COUNT(Satisfaction) AS MaxArrivaldelay_count
-FROM Dano_Airline
-WHERE Arrival_Delay >'60' AND Satisfaction ='satisfied'
-GROUP BY Satisfaction
-  UNION 
-SELECT Satisfaction
-       ,COUNT(Satisfaction) AS MaxArrivaldelay_count
-FROM Dano_Airline
-WHERE Arrival_Delay >'60' AND Satisfaction LIKE 'Neutral%'
-GROUP BY Satisfaction
-  
- 
- ---passengers satisfaction rate by flightdistance below 800 miles and above or equal to 800 miles 
- WITH Flight_distance1 AS (
- SELECT Class,COUNT(Flight_Distance) AS Short_flight
-      ,ROUND(COUNT(Flight_Distance)*100.0/(SELECT COUNT(Flight_Distance) 
-	FROM Dano_Airline),2) AS Percentage
- FROM Dano_Airline 
- WHERE Flight_Distance < 800
- GROUP BY Class),
- Flight_distance2 AS(
-SELECT Class,COUNT(Flight_Distance) AS Long_flight
-       ,ROUND(COUNT(Flight_Distance)*100.0/(SELECT COUNT(Flight_Distance) 
-		FROM Dano_Airline),2) AS Percentage 
- FROM Dano_Airline 
- WHERE Flight_Distance >= 800
- GROUP BY Class)
-SELECT S.Class,Short_Flight,S.Percentage,Long_Flight,L.Percentage
-FROM Flight_distance1 S
-INNER JOIN Flight_distance2 L
-ON  S.Class = L.Class
+UPDATE Dano_Airline
+SET Distance_category = 'Long flight'
+WHERE Flight_Distance >= 800
 
- -- How many Passengers are Satisfied/Dissatisfied with departure and arrival time convenience 
- WITH  Satisfied AS (
- SELECT Departure_and_Arrival_Time_Convenience
-       ,COUNT(Satisfaction) AS Satisfied_Passengers
- FROM Dano_Airline
+---How many passengers trvel short distance by class?
+ SELECT Class,COUNT(Flight_Distance) AS Short_flight_passengers
+            ,ROUND(COUNT(Flight_Distance)*100.0/(SELECT COUNT(Flight_Distance) 
+			FROM Dano_airline),2) AS Percentage
+ FROM Dano_airline 
+ WHERE Distance_category ='short flight'
+ GROUP BY Class 
+
+---How many passengers travel long distance by class?
+SELECT Class,COUNT(Flight_Distance) AS Long_flight_passengers
+            ,ROUND(COUNT(Flight_Distance)*100.0/(SELECT COUNT(Flight_Distance) 
+			FROM Dano_airline),2) AS Percentage 
+ FROM Dano_airline 
+ WHERE Distance_category ='long flight'
+ GROUP BY Class
+
+--- Count of passengers by Depature delay less than/equal to 60 minutes and greater than 60 minutes
+ WITH CTE1 AS
+     (SELECT COUNT(Departure_Delay) AS Min_depaturedelay
+ FROM Dano_airline
+ WHERE Departure_Delay <='60'),
+CTE2 AS
+    (SELECT COUNT(Departure_Delay)* 100.0 AS Max_depaturedelay
+ FROM Dano_airline
+ WHERE Departure_Delay >'60')
+SELECT Min_depaturedelay,Max_depaturedelay
+FROM CTE1 INNER JOIN CTE2 
+ON 1=1 
+
+--- Count of passengers by Arrival delay less than/equal to 60 minutes and greater than 60 minutes
+ WITH CTE1 AS 
+     (SELECT COUNT(Arrival_Delay) AS Min_arrivaldelay
+FROM Dano_airline
+ WHERE Arrival_Delay <='60'),
+CTE2 AS 
+     (SELECT COUNT(Arrival_delay) AS Max_arrivaldelay
+FROM Dano_airline
+WHERE Arrival_Delay >'60')
+SELECT Min_arrivaldelay,Max_arrivaldelay
+FROM CTE1 INNER JOIN CTE2 
+ON 1=1 
+
+ --Count of departure and arrival time convience by satisfaction
+ CREATE VIEW Satisfied AS 
+ SELECT TOP 6 Departure_and_Arrival_Time_Convenience
+        ,COUNT(Satisfaction) AS Satisfied_customers
+ FROM Dano_airline
  WHERE Satisfaction LIKE 'Sat%'
- GROUP BY Departure_and_Arrival_Time_Convenience),
- Neutral AS (
- SELECT Departure_and_Arrival_Time_Convenience
-        ,COUNT(Satisfaction) AS Dissatisfied_Passengers
- FROM Dano_Airline
+ GROUP BY Departure_and_Arrival_Time_Convenience
+ ORDER BY 2 DESC
+
+ CREATE VIEW Nuetral AS 
+ SELECT TOP 6 Departure_and_Arrival_Time_Convenience
+        ,COUNT(Satisfaction) AS Dissatisfied_customers
+ FROM Dano_airline
  WHERE Satisfaction LIKE 'Neutral%'
- GROUP BY Departure_and_Arrival_Time_Convenience)
-
- SELECT S.Departure_and_Arrival_Time_Convenience
-       ,Satisfied_Passengers,Dissatisfied_Passengers
- FROM Satisfied S INNER JOIN Neutral N
- ON S.Departure_and_Arrival_Time_Convenience 
-  = N.Departure_and_Arrival_Time_Convenience
-ORDER BY 1 ASC
-
-SELECT Departure_and_Arrival_Time_Convenience,COUNT(Departure_and_Arrival_Time_Convenience ) 
-FROM Dano_Airline 
-GROUP BY Departure_and_Arrival_Time_Convenience  
-ORDER BY 2 DESC
-
- --check in service and baggage handling 
- SELECT Check_in_Service
-        ,COUNT( Check_in_Service) AS Passenger_count
-        ,COUNT( Check_in_Service)*100.0
-		/(SELECT COUNT ( Check_in_Service) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY  Check_in_Service
+ GROUP BY Departure_and_Arrival_Time_Convenience
  ORDER BY 2 DESC
 
- SELECT Baggage_Handling
-        ,COUNT(Baggage_Handling) AS Passenger_Count
-         ,COUNT(Baggage_Handling)*100.0
-         /(SELECT COUNT (Baggage_Handling) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY Baggage_Handling
- ORDER BY 2 DESC
-
----ease of online booking VS online boarding 
-WITH CTE1 AS 
-(SELECT Ease_of_Online_Booking,COUNT(ID) AS Booking_Passenger_Count
- FROM Dano_Airline
- GROUP BY Ease_of_Online_Booking),
- CTE2 AS 
- (SELECT Online_Boarding,COUNT(ID) AS Boarding_Passenger_Count
- FROM Dano_Airline
- GROUP BY Online_Boarding)
-SELECT Ease_of_Online_Booking,Booking_Passenger_Count
-      ,Boarding_Passenger_Count
-FROM CTE1 E INNER JOIN CTE2 O
-ON Ease_of_Online_Booking=Online_Boarding
-
- --on board service and cleanliness 
- SELECT On_board_Service
-        ,COUNT(On_board_Service) AS Passenger_count
-        ,COUNT(On_board_Service)*100.0
-		/(SELECT COUNT (On_board_Service) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY On_board_Service
- ORDER BY 2 DESC
-
- SELECT Cleanliness
-        ,COUNT(Cleanliness) AS Passenger_Count
-         ,COUNT(Cleanliness)*100.0
-         /(SELECT COUNT (Cleanliness) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY Cleanliness
- ORDER BY 2 DESC
-
---- Is there a Correlation between food & drink and inflight entertainment ? 
- WITH CTE1 AS (SELECT Food_and_Drink
-           ,COUNT(ID) AS Food_and_Drink_Count
- FROM Dano_Airline
- GROUP BY Food_and_Drink),
- CTE2 AS (SELECT In_flight_Entertainment
-         ,COUNT(ID) AS In_flight_Entertainment_Count        
-FROM Dano_Airline
-GROUP BY In_flight_Entertainment)
-SELECT Food_and_Drink AS Rating,Food_and_Drink_Count
-       ,In_flight_Entertainment_Count
-FROM CTE1  INNER JOIN CTE2 
- ON  Food_and_Drink = In_flight_Entertainment
- ORDER BY 1 ASC
-
- ---inflight service and inflight wifi service 
- SELECT In_flight_service
-        ,COUNT(In_flight_Service) AS Passenger_count
-        ,COUNT(In_flight_Service)*100.0
-		/(SELECT COUNT (In_flight_Service) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY In_flight_Service
- ORDER BY 2 DESC
- SELECT In_flight_wifi_service
-        ,COUNT(In_flight_wifi_service) AS Passenger_count
-         ,COUNT(In_flight_wifi_service)*100.0
-         /(SELECT COUNT (In_flight_wifi_service) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY In_flight_Wifi_Service
- ORDER BY 2 DESC
-
- -- IS there a relationship betweeen seat comfort and leg room service by rating?
- --seat comfort
- SELECT Seat_Comfort
-        ,COUNT(Seat_Comfort) AS Passenger_count
-        ,COUNT(Seat_Comfort)*100.0
-		/(SELECT COUNT (Seat_Comfort) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY Seat_Comfort
- ORDER BY 2 DESC
- --leg room service
- SELECT Leg_Room_Service
-        ,COUNT(Leg_Room_Service) AS Passenger_count
-         ,COUNT(Leg_Room_Service)*100.0
-         /(SELECT COUNT (Leg_Room_Service) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY Leg_Room_Service
- ORDER BY 2 DESC
-
- --- gate location 
- SELECT Gate_Location
-        ,COUNT( Gate_Location) AS Passenger_count
-         ,COUNT( Gate_Location)*100.0
-         /(SELECT COUNT ( Gate_Location) FROM Dano_Airline) AS Percentage
- FROM Dano_Airline
- GROUP BY  Gate_Location
- ORDER BY 2 DESC
+ SELECT a.Departure_and_Arrival_Time_Convenience,
+        a.Satisfied_customers,b.Dissatisfied_customers
+ FROM Satisfied a
+ INNER JOIN
+ Nuetral b
+ ON a.Departure_and_Arrival_Time_Convenience 
+    = b.Departure_and_Arrival_Time_Convenience
 ```
 
-## Findings/Recomendation
+## Recommendation
 - Passengers travelling short distances (distance less than 800 miles) prefer to travel via Economy Class whereas passengers travelling Long distance (distance more than or equal to 800 
   miles ) prefer to travel via Business Class due to its convenience. Very Few People fly in Economy Class. At least 70% of passengers flying Economy Class are Neutral or dissatisfied.
 - There is a similarity between Arrival delay and Departure delay Satisfaction rate . In conclusion passengers are more dissatisfied with the Departure delay and Arrival delay which is 
