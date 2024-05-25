@@ -58,7 +58,7 @@ SELECT Min_depaturedelay,Max_depaturedelay
 FROM CTE1 INNER JOIN CTE2 
 ON 1=1
 ```
-![depature_count](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/ea8248d3-a216-41e1-bfd6-c8e1da10df80)
+![depature_count](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/c7dad1ce-44de-4890-b4c9-d3a4baefca54)
 
 #### Count of passengers by Arrival delay less than/equal to 60 minutes and greater than 60 minutes
 ```sql
@@ -74,7 +74,8 @@ SELECT Min_arrivaldelay,Max_arrivaldelay
 FROM CTE1 INNER JOIN CTE2 
 ON 1=1 
 ```
-![arrival_count](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/e94746cb-50c7-4f0c-9548-57ba2a7299ed)
+![arrival_count](https://github.com/BukolaOrire/Airline_Satisfaction_Rating/assets/161165047/4945aee9-0e1d-45a3-917a-0809149e0455)
+
 
 
 ## Data Visualization
